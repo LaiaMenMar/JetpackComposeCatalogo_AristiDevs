@@ -1,7 +1,6 @@
 package com.laiamenmar.jetpackcomposecatalogo
 
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.BorderStroke
@@ -70,13 +69,12 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.laiamenmar.jetpackcomposecatalogo.Login.LoginScreen
-import com.laiamenmar.jetpackcomposecatalogo.components.MyAlertDialog
-import com.laiamenmar.jetpackcomposecatalogo.components.MyConfirmationDialog
-import com.laiamenmar.jetpackcomposecatalogo.components.MyCustomDialog
-import com.laiamenmar.jetpackcomposecatalogo.components.MySimpleCustomDialog
-import com.laiamenmar.jetpackcomposecatalogo.tuit.TuitDivider
-import com.laiamenmar.jetpackcomposecatalogo.tuit.TwitterCard
+import androidx.navigation.NavType
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
+import com.laiamenmar.jetpackcomposecatalogo.model.Routes
 import com.laiamenmar.jetpackcomposecatalogo.ui.theme.CheckInfo
 import com.laiamenmar.jetpackcomposecatalogo.ui.theme.JetpackComposeCatalogoTheme
 
@@ -86,7 +84,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             JetpackComposeCatalogoTheme {
                 // A surface container using the 'background' color from the theme
-                /********* Tuit *******************/
+                /********* Tuit *******************//*
                 Column(
                    modifier = Modifier.fillMaxSize().background(Color(0xFF161D26))
 
@@ -96,9 +94,9 @@ class MainActivity : ComponentActivity() {
                     TwitterCard()
 
                 }
-                /******************************************/
+                /******************************************/*/
 
-               /******************* Surface(
+                Surface(
                     // modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
@@ -177,7 +175,77 @@ class MainActivity : ComponentActivity() {
                     LoginScreen()
                     /******************************************/*/
 
-                } ***************************************************************/
+                    /********* SimpleRecicleView *******************//*
+                    SimpleRecycleView()
+                    /******************************************/*/
+
+                    /********* SuperHeroView *******************//*
+                   SuperHeroView()
+                   /******************************************/*/
+
+                    /********* SuperHeroView *******************//*
+                   SuperHeroGridView()
+                   /******************************************/*/
+
+                    /********* SuperHeroViewSpecialControlView *******************//*
+                   SuperHeroViewSpecialControlView()
+                   /******************************************/*/
+
+                    /********* SuperHeroStickyView *******************//*
+                   SuperHeroStickyView()
+                   /******************************************/*/
+
+                    /********* ScaffoldExample_v1() *******************//*
+                   ScaffoldExample_v1()
+                   /******************************************/*/
+
+                    /********* Navegacioón entre pantallas *******************/
+                    val navigationController = rememberNavController()
+
+                    NavHost(
+                        navController = navigationController,
+                        startDestination = Routes.Pantalla1.route
+                    ) {
+                        composable(Routes.Pantalla1.route) {
+                            Screen1(navigationController)
+                        }
+                        composable(Routes.Pantalla2.route) {
+                            Screen2(navigationController)
+                        }
+                        composable(Routes.Pantalla3.route) {
+                            Screen3(navigationController)
+                        }
+                        /*La pasa como parámtro  OBLIGATORIO -> String*/
+                        composable("pantalla4/{name}") { backStackEntry ->
+                            Screen4(
+                                navigationController,
+                                backStackEntry.arguments?.getString("name").orEmpty()
+                            )
+                        }
+                        /*La pasa como parámtro  OBLIGATORIO -> Int*/
+                        composable(
+                            Routes.Pantalla5.route,
+                            arguments = listOf(navArgument("num") {type = NavType.IntType})
+                        ) { backStackEntry ->
+                            Screen5(
+                                navigationController,
+                                backStackEntry.arguments?.getInt("num") ?:0
+                            )
+                        }
+
+                        composable (Routes.Pantalla6.route,
+                            arguments = listOf(navArgument("name1", {defaultValue = "Pepe"}))) {
+                                backStackEntry ->
+                            Screen6(
+                                navigationController,
+                                backStackEntry.arguments?.getString("name1")
+                            )
+
+                        }
+
+
+                    }
+                }
             }
         }
     }
